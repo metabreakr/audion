@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17132"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -743,6 +743,7 @@ Gw
                         <outlet property="aboutImageView" destination="EUy-Tl-fi5" id="crY-Sz-yAV"/>
                         <outlet property="descriptionLabel1" destination="mFo-Sp-v5B" id="fw6-iW-wFr"/>
                         <outlet property="descriptionLabel2" destination="1CP-U6-hpE" id="cF1-Ff-jBU"/>
+                        <outlet property="hueSlider" destination="J3P-E4-WMD" id="7Yl-sx-bvZ"/>
                         <outlet property="tableView" destination="gUS-YE-M40" id="Vgr-CM-KdX"/>
                         <outlet property="urlField" destination="VvB-6J-i0v" id="Vj0-kz-Xz1"/>
                     </connections>

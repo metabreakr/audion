@@ -87,8 +87,10 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
     }
 
     func updateHue() {
-        if let hueFilter = CIFilter(name: "CIHueAdjust", parameters: ["inputAngle": UserDefaults.standard.hue]) {
-            view.layer?.filters = [hueFilter]
+        if #available(macOS 10.15, *) {
+            if let hueFilter = CIFilter(name: "CIHueAdjust", parameters: ["inputAngle": UserDefaults.standard.hue]) {
+                view.layer?.filters = [hueFilter]
+            }
         }
     }
 

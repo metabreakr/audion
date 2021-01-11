@@ -87,6 +87,7 @@ class AppearancePrefsViewController: NSViewController, NSTableViewDataSource, NS
     @IBOutlet private weak var descriptionLabel2: NSTextField? = nil
     @IBOutlet private weak var urlField: NSTextField? = nil
     @IBOutlet private weak var tableView: NSTableView? = nil
+    @IBOutlet private weak var hueSlider: NSSlider? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,6 +118,12 @@ class AppearancePrefsViewController: NSViewController, NSTableViewDataSource, NS
 
         self.faces.sort() { a, b in
             return a.lastPathComponent.localizedStandardCompare(b.lastPathComponent) == .orderedAscending
+        }
+
+        guard #available(macOS 10.15, *) else {
+            self.hueSlider?.isEnabled = false
+            self.hueSlider?.toolTip = NSLocalizedString("Hue adjustment requires macOS 10.15 or later.", comment: "")
+            return
         }
     }
 
