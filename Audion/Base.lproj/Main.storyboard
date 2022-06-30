@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -558,7 +558,7 @@ Gw
             <objects>
                 <viewController title="Appearance" storyboardIdentifier="AppearancePrefPane" id="sLJ-0e-pOC" customClass="AppearancePrefsViewController" customModule="Audion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="MXo-i7-BJm">
-                        <rect key="frame" x="0.0" y="0.0" width="374" height="291"/>
+                        <rect key="frame" x="0.0" y="0.0" width="386" height="291"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1f9-3O-Ls4">
@@ -587,7 +587,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="FaceRow" id="YyG-c9-Nns">
-                                                            <rect key="frame" x="11" y="1" width="180" height="17"/>
+                                                            <rect key="frame" x="1" y="1" width="180" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gtf-ex-Asx">
@@ -636,7 +636,7 @@ Gw
                                 </tableHeaderView>
                             </scrollView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EUy-Tl-fi5">
-                                <rect key="frame" x="204" y="121" width="150" height="150"/>
+                                <rect key="frame" x="216" y="121" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="fj6-zF-dgH"/>
                                     <constraint firstAttribute="width" constant="150" id="k7y-mI-LaK"/>
@@ -655,7 +655,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mFo-Sp-v5B">
-                                <rect key="frame" x="110" y="97" width="246" height="16"/>
+                                <rect key="frame" x="110" y="97" width="258" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="fQi-4V-TvC">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -663,7 +663,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1CP-U6-hpE">
-                                <rect key="frame" x="110" y="81" width="246" height="16"/>
+                                <rect key="frame" x="110" y="81" width="258" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" id="8DB-AS-qW0">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -671,7 +671,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VvB-6J-i0v" customClass="ClickableTextField" customModule="Audion" customModuleProvider="target">
-                                <rect key="frame" x="110" y="57" width="246" height="16"/>
+                                <rect key="frame" x="110" y="57" width="258" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" selectable="YES" allowsEditingTextAttributes="YES" id="Sj1-IV-iyk">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -679,7 +679,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="x9f-EO-faA">
-                                <rect key="frame" x="20" y="46" width="334" height="5"/>
+                                <rect key="frame" x="20" y="46" width="346" height="5"/>
                             </box>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t97-QY-MF5">
                                 <rect key="frame" x="18" y="23" width="105" height="16"/>
@@ -690,7 +690,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J3P-E4-WMD">
-                                <rect key="frame" x="127" y="14" width="229" height="28"/>
+                                <rect key="frame" x="127" y="14" width="241" height="28"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="6.2831853100000004" tickMarkPosition="above" numberOfTickMarks="2" sliderType="linear" id="4U5-f3-HHL"/>
                                 <connections>
                                     <binding destination="oya-Iw-RaT" name="value" keyPath="values.hue" id="1Kb-wF-N91"/>
@@ -709,7 +709,7 @@ Gw
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="EUy-Tl-fi5" firstAttribute="leading" secondItem="1f9-3O-Ls4" secondAttribute="trailing" priority="999" constant="8" symbolic="YES" id="5D3-El-Mcj"/>
+                            <constraint firstItem="EUy-Tl-fi5" firstAttribute="leading" secondItem="1f9-3O-Ls4" secondAttribute="trailing" priority="999" constant="20" id="5D3-El-Mcj"/>
                             <constraint firstItem="1f9-3O-Ls4" firstAttribute="leading" secondItem="MXo-i7-BJm" secondAttribute="leading" constant="20" symbolic="YES" id="7Dm-gI-h1j"/>
                             <constraint firstItem="t97-QY-MF5" firstAttribute="leading" secondItem="MXo-i7-BJm" secondAttribute="leading" constant="20" symbolic="YES" id="81f-U0-3l7"/>
                             <constraint firstItem="EUy-Tl-fi5" firstAttribute="top" secondItem="MXo-i7-BJm" secondAttribute="top" constant="20" symbolic="YES" id="A9f-Af-g4Q"/>
