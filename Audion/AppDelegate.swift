@@ -89,7 +89,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-@objc (AudionApplication)
+@objc(AudionApplication)
 class AudionApplication: NSApplication {
     override var nextResponder: NSResponder? {
         get {
