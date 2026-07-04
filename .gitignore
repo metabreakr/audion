@@ -16,6 +16,20 @@ profile
 # OS files
 .DS_Store
 
+# Build products
+DerivedData
+*.app
+build.log
+
+# Downloadable content — faces come from https://download-cdn.panic.com/audion-viewer/
+Faces
+
+# One-off project scaffolding scripts
+add_file.sh
+add_files_to_project.py
+add_playlist_files.rb
+add_to_project.py
+
 Pods
 #*.xcworkspace/xcshareddata/
 TransmitDisk/osxfuse-lib

@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  FaceKit
+
+  Created by Buckley on 5/11/20.
+  Copyright © 2020 Panic. All rights reserved.
+*/
+
+"Play" = "Play";
+"Pause" = "Pause";
+"Stop" = "Stop";
+"Rewind / Previous Track" = "Rewind / Previous Track";
+"Fast Forward / Next Track" = "Fast Forward / Next Track";
+"Eject" = "Eject";
+"Close" = "Close";
+"Info" = "Info";
+"Volume" = "Volume";
+"Playlists" = "Playlists";
+"Play Mode" = "Play Mode";
+
+"Show Volume Slider" = "Show Volume Slider";
+"Show Position Slider" = "Show Position Slider";

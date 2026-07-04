@@ -25,6 +25,9 @@ class AudionWindow: NSWindow {
         self.isOpaque = false
         self.backgroundColor = NSColor.clear
         self.isMovableByWindowBackground = true
+
+        // Enable automatic window frame saving
+        self.setFrameAutosaveName("MainAudionWindow")
     }
 
     override var canBecomeKey: Bool {

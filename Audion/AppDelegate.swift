@@ -51,6 +51,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func openFacesFolder(_ sender: Any?) {
+        let fileManager = FileManager.default
+
+        // First check for Faces folder next to the app
+        let facesNextToApp = Bundle.main.bundleURL.deletingLastPathComponent().appendingPathComponent("Faces", isDirectory: true)
+        if fileManager.fileExists(atPath: facesNextToApp.path) {
+            NSWorkspace.shared.open(facesNextToApp)
+            return
+        }
+
+        // Otherwise open Application Support directory
         if let appSupportDirectory = self.appSupportDirectory {
             NSWorkspace.shared.open(appSupportDirectory)
         }
@@ -79,13 +89,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.preferencesWindowController?.window?.makeKeyAndOrderFront(self)
     }
 
-    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-        for window in NSApp.windows {
-            if let viewController = window.contentViewController as? ViewController {
-                return viewController.open(url: URL(fileURLWithPath: filename))
+    /// Extensions opened as playlists rather than as a single playable file.
+    private static let playlistExtensions: Set<String> = ["audionplaylist", "m3u", "m3u8", "pls"]
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls {
+            if AppDelegate.playlistExtensions.contains(url.pathExtension.lowercased()) {
+                openPlaylist(at: url)
+            } else {
+                _ = mainViewController()?.open(url: url)
             }
         }
-        return false
+    }
+
+    private func openPlaylist(at url: URL) {
+        do {
+            try PlaylistManager.shared.loadPlaylistFromFile(at: url)
+            PlaylistWindowManager.shared.show()
+        } catch {
+            let alert = NSAlert()
+            alert.messageText = "Could Not Open Playlist"
+            alert.informativeText = error.localizedDescription
+            alert.alertStyle = .warning
+            alert.runModal()
+        }
+    }
+
+    private func mainViewController() -> ViewController? {
+        for window in NSApp.windows {
+            if let viewController = window.contentViewController as? ViewController {
+                return viewController
+            }
+        }
+        return nil
     }
 }
 

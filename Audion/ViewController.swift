@@ -20,6 +20,7 @@ along with Audion.  If not, see <https://www.gnu.org/licenses/>.
 import AVFoundation
 import Cocoa
 import FaceKit
+import UniformTypeIdentifiers
 
 let AudionFloatingPrefKey = "floating"
 let AudionScalePrefKey = "scale"
@@ -31,6 +32,9 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
 
     private var hueFilter: CIFilter? = nil
     private var hueObserver: NSKeyValueObservation? = nil
+
+    private var playlistViewController: PlaylistViewController?
+    private let playlistWindowManager = PlaylistWindowManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +78,36 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
         NotificationCenter.default.addObserver(forName: NSApplication.didResignActiveNotification, object: NSApplication.shared, queue: OperationQueue.main) { _ in
             self.faceView?.isInactive = !self.isFloating
         }
+
+        setupPlaylist()
+        setupFaceKitNotifications()
+    }
+
+    private func setupPlaylist() {
+        let playlistVC = PlaylistViewController(nibName: "PlaylistView", bundle: nil)
+        playlistVC.player = player
+        playlistViewController = playlistVC
+        playlistWindowManager.setup(with: playlistVC)
+    }
+
+    private func setupFaceKitNotifications() {
+        // Listen for FaceKit button clicks
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("TogglePlaylist"), object: nil, queue: .main) { [weak self] _ in
+            self?.togglePlaylist(nil)
+        }
+
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("ToggleShuffle"), object: nil, queue: .main) { _ in
+            let manager = PlaylistManager.shared
+            if manager.isShuffled {
+                manager.unshuffle()
+            } else {
+                manager.shuffle()
+            }
+        }
+
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowInfoPanel"), object: nil, queue: .main) { [weak self] _ in
+            self?.showInfoPanel(nil)
+        }
     }
 
     override func viewWillAppear() {
@@ -84,6 +118,8 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
         if UserDefaults.standard.bool(forKey: AudionFloatingPrefKey) {
             self.view.window?.level = .floating
         }
+
+        playlistWindowManager.mainWindow = self.view.window
     }
 
     func updateHue() {
@@ -113,7 +149,7 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
         openPanel.canChooseFiles = true
-        openPanel.allowedFileTypes = AVURLAsset.audiovisualTypes().map() { $0.rawValue }
+        openPanel.allowedContentTypes = AVURLAsset.audiovisualTypes().compactMap { UTType($0.rawValue) }
 
         let result = openPanel.runModal()
         if result == .OK {
@@ -157,6 +193,103 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
         }
 
         return false
+    }
+
+    // MARK: - Playlist Actions
+
+    @IBAction func togglePlaylist(_ sender: Any?) {
+        playlistWindowManager.toggleVisibility()
+    }
+
+    @IBAction func addToPlaylist(_ sender: Any?) {
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.allowsMultipleSelection = true
+        openPanel.allowedContentTypes = AVURLAsset.audiovisualTypes().compactMap { UTType($0.rawValue) }
+
+        let result = openPanel.runModal()
+        if result == .OK {
+            for url in openPanel.urls {
+                PlaylistManager.shared.addURL(url)
+            }
+        }
+    }
+
+    @IBAction func nextTrack(_ sender: Any?) {
+        player.playNextTrack()
+    }
+
+    @IBAction func previousTrack(_ sender: Any?) {
+        player.playPreviousTrack()
+    }
+
+    @IBAction func savePlaylist(_ sender: Any?) {
+        playlistViewController?.savePlaylist(sender ?? self)
+    }
+
+    @IBAction func loadPlaylist(_ sender: Any?) {
+        playlistViewController?.loadPlaylist(sender ?? self)
+    }
+
+    @IBAction func clearPlaylist(_ sender: Any?) {
+        PlaylistManager.shared.clearPlaylist()
+    }
+
+    @IBAction func toggleShuffle(_ sender: Any?) {
+        playlistViewController?.toggleShuffle(sender ?? self)
+    }
+
+    @IBAction func selectAllTracks(_ sender: Any?) {
+        playlistViewController?.selectAllTracks(sender ?? self)
+    }
+
+    @IBAction func removeTrack(_ sender: Any?) {
+        playlistViewController?.removeSelectedTracks(sender ?? self)
+    }
+
+    @IBAction func undoRemoveTrack(_ sender: Any?) {
+        playlistViewController?.undoRemoveTrack(sender ?? self)
+    }
+
+    @IBAction func redoRemoveTrack(_ sender: Any?) {
+        playlistViewController?.redoRemoveTrack(sender ?? self)
+    }
+
+    @IBAction func setPlaylistModeFloating(_ sender: Any?) {
+        playlistWindowManager.currentMode = .floatingWindow
+        playlistWindowManager.show()
+    }
+
+    @IBAction func setPlaylistModeMenuBar(_ sender: Any?) {
+        playlistWindowManager.currentMode = .menuBar
+        playlistWindowManager.show()
+    }
+
+    @IBAction func togglePlaylistMode(_ sender: Any?) {
+        // Toggle between floating window and menu bar
+        if playlistWindowManager.currentMode == .floatingWindow {
+            playlistWindowManager.currentMode = .menuBar
+        } else {
+            playlistWindowManager.currentMode = .floatingWindow
+        }
+        playlistWindowManager.show()
+    }
+
+    @IBAction func showInfoPanel(_ sender: Any?) {
+        // Show playlist window if it's hidden
+        if !playlistWindowManager.isCurrentlyVisible {
+            playlistWindowManager.show()
+        }
+
+        // If no tracks are selected, select the current playing track
+        if let playlistVC = playlistViewController, !playlistVC.hasSelectedTracks() {
+            if let currentIndex = player.playlistManager.currentTrackIndex {
+                playlistVC.selectTrack(at: currentIndex)
+            }
+        }
+
+        playlistViewController?.showInfoDrawer(sender)
     }
 
     @IBAction func playPause(_ sender: Any?) {
@@ -214,6 +347,8 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
             self.view.window?.level = .floating
             UserDefaults.standard.set(true, forKey: AudionFloatingPrefKey)
         }
+        // Update playlist window level to match
+        playlistWindowManager.updateWindowLevel()
     }
 
     func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
@@ -246,6 +381,25 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
                 } else {
                     item.state = .off
                 }
+            } else if action == #selector(nextTrack(_:)) {
+                return player.playlistManager.hasNextTrack
+            } else if action == #selector(previousTrack(_:)) {
+                return player.playlistManager.hasPreviousTrack
+            } else if action == #selector(setPlaylistModeFloating(_:)) {
+                item.state = playlistWindowManager.currentMode == .floatingWindow ? .on : .off
+            } else if action == #selector(setPlaylistModeMenuBar(_:)) {
+                item.state = playlistWindowManager.currentMode == .menuBar ? .on : .off
+            } else if action == #selector(undoRemoveTrack(_:)) {
+                return playlistViewController?.canUndoRemove() ?? false
+            } else if action == #selector(redoRemoveTrack(_:)) {
+                return playlistViewController?.canRedoRemove() ?? false
+            } else if action == #selector(removeTrack(_:)) {
+                return playlistViewController?.hasSelectedTracks() ?? false
+            } else if action == #selector(selectAllTracks(_:)) {
+                return playlistViewController?.hasAnyTracks() ?? false
+            } else if action == #selector(showInfoPanel(_:)) {
+                // Enable if there are any tracks or a track is currently playing
+                return playlistViewController?.hasAnyTracks() ?? false
             }
         }
 

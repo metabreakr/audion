@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE6EDF96F6484CE49991741B /* PlaylistModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275980CEB233440AB7512389 /* PlaylistModels.swift */; };
+		82986F9F295B4311A4026046 /* PlaylistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2B02EAE97549ACBEB78330 /* PlaylistManager.swift */; };
+		22157E5323CE4113800BD07C /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC0B28F67104376AF67BD15 /* PlaylistViewController.swift */; };
+		583549891BF74901B0314849 /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FA30AFFB3F24CE8B8AE0070 /* TrackInfoViewController.swift */; };
+		5277AE69D426465FA41E34B8 /* PlaylistWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBA216D949AB4A63BDC717B0 /* PlaylistWindowManager.swift */; };
+		3751789918224881BBD3ACF2 /* PlaylistView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C320549B27564E0F9E54D92C /* PlaylistView.xib */; };
 		30246F7F24DDB63E00CDCD4D /* OpenStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30246F7E24DDB63E00CDCD4D /* OpenStreamViewController.swift */; };
 		302BB1DE24E1A1C9007B102B /* AppearancePrefsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302BB1DC24E1A1C9007B102B /* AppearancePrefsViewController.swift */; };
 		30A32E19246D7EB800D8DC1B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30A32E18246D7EB800D8DC1B /* AppDelegate.swift */; };
@@ -59,6 +65,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		275980CEB233440AB7512389 /* PlaylistModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistModels.swift; sourceTree = "<group>"; };
+		5B2B02EAE97549ACBEB78330 /* PlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistManager.swift; sourceTree = "<group>"; };
+		9FC0B28F67104376AF67BD15 /* PlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
+		7FA30AFFB3F24CE8B8AE0070 /* TrackInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
+		DBA216D949AB4A63BDC717B0 /* PlaylistWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistWindowManager.swift; sourceTree = "<group>"; };
+		C320549B27564E0F9E54D92C /* PlaylistView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaylistView.xib; sourceTree = "<group>"; };
 		30246F7E24DDB63E00CDCD4D /* OpenStreamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenStreamViewController.swift; sourceTree = "<group>"; };
 		302BB1DC24E1A1C9007B102B /* AppearancePrefsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePrefsViewController.swift; sourceTree = "<group>"; };
 		30A32E15246D7EB800D8DC1B /* Audion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Audion.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,7 +130,13 @@
 				30246F7E24DDB63E00CDCD4D /* OpenStreamViewController.swift */,
 				30A32E3C246D88ED00D8DC1B /* Player.swift */,
 				30A32E1A246D7EB800D8DC1B /* ViewController.swift */,
-			);
+			
+				275980CEB233440AB7512389 /* PlaylistModels.swift */,
+				5B2B02EAE97549ACBEB78330 /* PlaylistManager.swift */,
+				9FC0B28F67104376AF67BD15 /* PlaylistViewController.swift */,
+				7FA30AFFB3F24CE8B8AE0070 /* TrackInfoViewController.swift */,
+				DBA216D949AB4A63BDC717B0 /* PlaylistWindowManager.swift */,
+				C320549B27564E0F9E54D92C /* PlaylistView.xib */,);
 			path = Audion;
 			sourceTree = "<group>";
 		};
@@ -224,6 +242,7 @@
 			files = (
 				30A32E1D246D7EBC00D8DC1B /* Assets.xcassets in Resources */,
 				30A32E20246D7EBC00D8DC1B /* Main.storyboard in Resources */,
+				3751789918224881BBD3ACF2 /* PlaylistView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +259,11 @@
 				30A32E19246D7EB800D8DC1B /* AppDelegate.swift in Sources */,
 				30246F7F24DDB63E00CDCD4D /* OpenStreamViewController.swift in Sources */,
 				302BB1DE24E1A1C9007B102B /* AppearancePrefsViewController.swift in Sources */,
+				DE6EDF96F6484CE49991741B /* PlaylistModels.swift in Sources */,
+				82986F9F295B4311A4026046 /* PlaylistManager.swift in Sources */,
+				22157E5323CE4113800BD07C /* PlaylistViewController.swift in Sources */,
+				583549891BF74901B0314849 /* TrackInfoViewController.swift in Sources */,
+				5277AE69D426465FA41E34B8 /* PlaylistWindowManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -371,7 +395,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -396,7 +420,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 4.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.panic.Audion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -421,7 +445,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 4.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.panic.Audion;
 				PRODUCT_NAME = "$(TARGET_NAME)";

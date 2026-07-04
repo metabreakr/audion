@@ -98,9 +98,11 @@ class AppearancePrefsViewController: NSViewController, NSTableViewDataSource, NS
             self.faces.append(defaultURL)
         }
 
-        if let appDelegate = NSApp.delegate as? AppDelegate, let appSupportURL = appDelegate.appSupportDirectory {
+        // First, check for Faces folder next to the app bundle
+        let appURL = Bundle.main.bundleURL.deletingLastPathComponent().appendingPathComponent("Faces", isDirectory: true)
+        if fileManager.fileExists(atPath: appURL.path) {
             do {
-                let contents = try fileManager.contentsOfDirectory(at: appSupportURL, includingPropertiesForKeys: nil, options: .skipsSubdirectoryDescendants)
+                let contents = try fileManager.contentsOfDirectory(at: appURL, includingPropertiesForKeys: nil, options: .skipsSubdirectoryDescendants)
                 for url in contents {
                     if url.lastPathComponent == "Smoothface 2" {
                         continue
@@ -112,7 +114,29 @@ class AppearancePrefsViewController: NSViewController, NSTableViewDataSource, NS
                     }
                 }
             } catch {
-                fatalError()
+                NSLog("Error loading faces from app directory: \(error)")
+            }
+        }
+
+        // Also check Application Support directory for backward compatibility
+        if let appDelegate = NSApp.delegate as? AppDelegate, let appSupportURL = appDelegate.appSupportDirectory {
+            do {
+                let contents = try fileManager.contentsOfDirectory(at: appSupportURL, includingPropertiesForKeys: nil, options: .skipsSubdirectoryDescendants)
+                for url in contents {
+                    if url.lastPathComponent == "Smoothface 2" {
+                        continue
+                    }
+
+                    let indexURL = url.appendingPathComponent("index.json")
+                    if fileManager.fileExists(atPath: indexURL.path) {
+                        // Only add if not already in the list
+                        if !self.faces.contains(where: { $0.lastPathComponent == url.lastPathComponent }) {
+                            self.faces.append(url)
+                        }
+                    }
+                }
+            } catch {
+                NSLog("Error loading faces from Application Support: \(error)")
             }
         }
 

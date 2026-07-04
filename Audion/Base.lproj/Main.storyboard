@@ -346,6 +346,122 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Playlist" id="PLY-mn-001">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Playlist" id="PLY-mn-002">
+                                    <items>
+                                        <menuItem title="Show/Hide Playlist" keyEquivalent="p" id="PLY-mi-001">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="togglePlaylist:" target="Ady-hI-5gd" id="PLY-ac-001"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-001"/>
+                                        <menuItem title="Add Files to Playlist..." keyEquivalent="&#x7f;" id="PLY-mi-002">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="addToPlaylist:" target="Ady-hI-5gd" id="PLY-ac-002"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Select All" keyEquivalent="a" id="PLY-mi-002a">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="selectAllTracks:" target="Ady-hI-5gd" id="PLY-ac-002a"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Show Track Info" keyEquivalent="i" id="PLY-mi-002i">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="showInfoPanel:" target="Ady-hI-5gd" id="PLY-ac-002i"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-001a"/>
+                                        <menuItem title="Remove Track" keyEquivalent="&#x7f;" id="PLY-mi-002b">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="removeTrack:" target="Ady-hI-5gd" id="PLY-ac-002b"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-001b"/>
+                                        <menuItem title="Undo Remove Track" id="PLY-mi-002c">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="undoRemoveTrack:" target="Ady-hI-5gd" id="PLY-ac-002c"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Redo Remove Track" id="PLY-mi-002d">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="redoRemoveTrack:" target="Ady-hI-5gd" id="PLY-ac-002d"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Save Playlist..." keyEquivalent="s" id="PLY-mi-003">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="savePlaylist:" target="Ady-hI-5gd" id="PLY-ac-003"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Load Playlist..." keyEquivalent="l" id="PLY-mi-004">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="loadPlaylist:" target="Ady-hI-5gd" id="PLY-ac-004"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Clear Playlist" keyEquivalent="k" id="PLY-mi-005">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="clearPlaylist:" target="Ady-hI-5gd" id="PLY-ac-005"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-002"/>
+                                        <menuItem title="Toggle Shuffle" keyEquivalent="u" id="PLY-mi-005a">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleShuffle:" target="Ady-hI-5gd" id="PLY-ac-005a"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-002a"/>
+                                        <menuItem title="Next Track" keyEquivalent="→" id="PLY-mi-006">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="nextTrack:" target="Ady-hI-5gd" id="PLY-ac-006"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Previous Track" keyEquivalent="←" id="PLY-mi-007">
+                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <connections>
+                                                <action selector="previousTrack:" target="Ady-hI-5gd" id="PLY-ac-007"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="PLY-sp-003"/>
+                                        <menuItem title="Toggle Display Mode" keyEquivalent="P" id="PLY-mi-011">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="togglePlaylistMode:" target="Ady-hI-5gd" id="PLY-ac-011"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Display Mode" id="PLY-mi-008">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Display Mode" id="PLY-sm-001">
+                                                <items>
+                                                    <menuItem title="Floating Window" id="PLY-mi-009">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setPlaylistModeFloating:" target="Ady-hI-5gd" id="PLY-ac-009"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Menu Bar" id="PLY-mi-010">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="setPlaylistModeMenuBar:" target="Ady-hI-5gd" id="PLY-ac-010"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Window" id="yPj-gz-t9M">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="KNl-cj-DPh">
@@ -419,7 +535,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Audion" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="AudionWindow" customModule="Audion" customModuleProvider="target">
+                    <window key="window" title="Audion" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="AudionWindow" customModule="Audion" customModuleProvider="target">
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
@@ -966,6 +1082,19 @@ Gw
                 </menu>
             </objects>
             <point key="canvasLocation" x="750" y="1215"/>
+        </scene>
+        <!--Playlist View Controller-->
+        <scene sceneID="PLY-sc-001">
+            <objects>
+                <viewController storyboardIdentifier="PlaylistViewController" id="PLY-vc-001" customClass="PlaylistViewController" customModule="Audion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="PLY-vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="PLY-fr-001" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="750" y="1615"/>
         </scene>
     </scenes>
 </document>

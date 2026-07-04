@@ -1,0 +1,231 @@
+{
+  "connectingFrameDelay" : 4,
+  "connectingFirstPICTID" : 300,
+  "rewindButtonRect" : {
+    "right" : 154,
+    "top" : 80,
+    "left" : 118,
+    "bottom" : 112
+  },
+  "fastForwardButtonRect" : {
+    "right" : 261,
+    "top" : 80,
+    "left" : 223,
+    "bottom" : 112
+  },
+  "artistDisplayTextFaceColorFromFace" : {
+    "red" : 0,
+    "green" : 0,
+    "blue" : 0
+  },
+  "trackDigit1Rect" : {
+    "right" : 53,
+    "top" : 20,
+    "left" : 29,
+    "bottom" : 60
+  },
+  "volumeButtonRect" : {
+    "right" : 109,
+    "top" : 88,
+    "left" : 88,
+    "bottom" : 106
+  },
+  "albumDisplayRect" : {
+    "right" : 311,
+    "top" : 60,
+    "left" : 187,
+    "bottom" : 74
+  },
+  "useAlphaChannel" : true,
+  "closeButtonRect" : {
+    "right" : 1,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 1
+  },
+  "infoButtonRect" : {
+    "right" : 71,
+    "top" : 88,
+    "left" : 51,
+    "bottom" : 106
+  },
+  "timeDigit4FirstPICTID" : 233,
+  "CDDBIndicatorRect" : {
+    "right" : 1,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 1
+  },
+  "playlistButtonRect" : {
+    "right" : 89,
+    "top" : 74,
+    "left" : 70,
+    "bottom" : 93
+  },
+  "albumTextMode" : 1,
+  "albumUnderline" : false,
+  "netLagFirstPICTID" : 350,
+  "timeDigit4Rect" : {
+    "right" : 153,
+    "top" : 20,
+    "left" : 134,
+    "bottom" : 60
+  },
+  "albumFontSize" : 10,
+  "playButtonRect" : {
+    "right" : 224,
+    "top" : 80,
+    "left" : 188,
+    "bottom" : 112
+  },
+  "netIndicatorRect" : {
+    "right" : 1,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 1
+  },
+  "artistCondense" : false,
+  "albumDisplayTextFaceColorFromTxtr" : {
+    "red" : 193,
+    "green" : 193,
+    "blue" : 193
+  },
+  "albumShadow" : false,
+  "albumCondense" : false,
+  "netLagAnimRect" : {
+    "right" : 69,
+    "top" : 22,
+    "left" : 35,
+    "bottom" : 56
+  },
+  "artistOutline" : false,
+  "artistJustify" : false,
+  "albumExtend" : false,
+  "timeDigit3FirstPICTID" : 222,
+  "albumTextRenderMode" : "normal",
+  "faceInfo" : [
+    "Smoothface 2: A whole lot smoother\n©1999 - 2001 Panic \/ CS \/ JB",
+    "http:\/\/www.panic.com\/ppack\/audion\/faces.shtml",
+    "Click here to download more cool faces!"
+  ],
+  "streamingFrameDelay" : 4,
+  "pauseIndicatorRect" : {
+    "right" : 0,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 0
+  },
+  "netLagFrameDelay" : 4,
+  "artistTextRenderMode" : "normal",
+  "timeDigit1Rect" : {
+    "right" : 96,
+    "top" : 20,
+    "left" : 77,
+    "bottom" : 60
+  },
+  "albumOutline" : false,
+  "artistExtend" : false,
+  "artistItalic" : false,
+  "timeDigit2FirstPICTID" : 211,
+  "artistFontSize" : 10,
+  "albumDisplayFontName" : "Charcoal",
+  "artistUnderline" : false,
+  "trackDigit1FirstPICTID" : 245,
+  "MP3IndicatorRect" : {
+    "right" : 1,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 1
+  },
+  "streamingNumPICTs" : 6,
+  "artistDisplayRect" : {
+    "right" : 311,
+    "top" : 47,
+    "left" : 187,
+    "bottom" : 61
+  },
+  "ejectButtonRect" : {
+    "right" : 308,
+    "top" : 80,
+    "left" : 270,
+    "bottom" : 112
+  },
+  "modeButtonRect" : {
+    "right" : 89,
+    "top" : 102,
+    "left" : 70,
+    "bottom" : 120
+  },
+  "artistDisplayTextFaceColorFromTxtr" : {
+    "red" : 255,
+    "green" : 255,
+    "blue" : 255
+  },
+  "playIndicatorRect" : {
+    "right" : 0,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 0
+  },
+  "streamingAnimRect" : {
+    "right" : 69,
+    "top" : 22,
+    "left" : 35,
+    "bottom" : 56
+  },
+  "artistTextMode" : 1,
+  "albumItalic" : false,
+  "albumJustify" : false,
+  "stopButtonRect" : {
+    "right" : 189,
+    "top" : 80,
+    "left" : 153,
+    "bottom" : 112
+  },
+  "artistShadow" : false,
+  "timeDigit2Rect" : {
+    "right" : 119,
+    "top" : 20,
+    "left" : 95,
+    "bottom" : 60
+  },
+  "timeDigit1FirstPICTID" : 200,
+  "CDIndicatorRect" : {
+    "right" : 1,
+    "top" : 0,
+    "left" : 0,
+    "bottom" : 1
+  },
+  "connectingNumPICTs" : 7,
+  "useInactiveState" : false,
+  "albumBold" : false,
+  "streamingFirstPICTID" : 320,
+  "netLagNumPICTs" : 5,
+  "version" : 0,
+  "artistBold" : false,
+  "connectingAnimRect" : {
+    "right" : 69,
+    "top" : 22,
+    "left" : 35,
+    "bottom" : 56
+  },
+  "albumDisplayTextFaceColorFromFace" : {
+    "red" : 0,
+    "green" : 0,
+    "blue" : 0
+  },
+  "timeDigit3Rect" : {
+    "right" : 135,
+    "top" : 20,
+    "left" : 118,
+    "bottom" : 60
+  },
+  "artistDisplayFontName" : "Geneva",
+  "trackDigit2Rect" : {
+    "right" : 77,
+    "top" : 20,
+    "left" : 52,
+    "bottom" : 60
+  },
+  "trackDigit2FirstPICTID" : 256
+}

@@ -34,6 +34,9 @@ class Player: NSObject, AudionFaceViewDelegate {
                 avPlayer.removeObserver(self, forKeyPath: "rate")
                 avPlayer.removeObserver(self, forKeyPath: "status")
                 avPlayer.removeObserver(self, forKeyPath: "timeControlStatus")
+                if let currentItem = avPlayer.currentItem {
+                    NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: currentItem)
+                }
             }
         }
         didSet {
@@ -41,6 +44,9 @@ class Player: NSObject, AudionFaceViewDelegate {
                 avPlayer.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
                 avPlayer.addObserver(self, forKeyPath: "status", options: .new, context: nil)
                 avPlayer.addObserver(self, forKeyPath: "timeControlStatus", options: .new, context: nil)
+                if let currentItem = avPlayer.currentItem {
+                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: currentItem)
+                }
             }
         }
     }
@@ -49,6 +55,7 @@ class Player: NSObject, AudionFaceViewDelegate {
     private var filename: String? = nil
     private var streaming = false
     private var startedStream = false
+    var playlistManager = PlaylistManager.shared
 
     func open(url: URL) -> Bool {
         let asset = AVURLAsset(url: url)
@@ -58,13 +65,10 @@ class Player: NSObject, AudionFaceViewDelegate {
         self.avPlayer?.automaticallyWaitsToMinimizeStalling = true
         self.faceView?.stop()
 
-        let duration = self.avPlayer?.currentItem?.asset.duration.seconds ?? 0.0
-
-        if duration.isFinite {
-            self.faceView?.durationInSeconds = Int(duration)
-        } else {
-            self.faceView?.durationInSeconds = -1
-        }
+        // The real duration is filled in asynchronously once the item is ready to
+        // play (see updateMetadata); show "unknown" until then rather than blocking
+        // the main thread to load it here.
+        self.faceView?.durationInSeconds = -1
 
         if url.isFileURL {
             self.filename = url.lastPathComponent
@@ -77,8 +81,8 @@ class Player: NSObject, AudionFaceViewDelegate {
             self.faceView?.animationType = .connecting
         }
 
-        let assetLength = Float(asset.duration.value) / Float(asset.duration.timescale)
-        return (assetLength > 0)
+        // A local file must exist to be playable; streams are always worth attempting.
+        return url.isFileURL ? FileManager.default.fileExists(atPath: url.path) : true
     }
 
     var isPlaying: Bool {
@@ -89,6 +93,20 @@ class Player: NSObject, AudionFaceViewDelegate {
 
     var isScrubbing = false
 
+    var duration: TimeInterval? {
+        guard let item = avPlayer?.currentItem else { return nil }
+        let duration = item.duration.seconds
+        return duration.isFinite ? duration : nil
+    }
+
+    var currentTime: TimeInterval {
+        return avPlayer?.currentTime().seconds ?? 0
+    }
+
+    func seek(to time: TimeInterval) {
+        avPlayer?.seek(to: CMTime(seconds: time, preferredTimescale: CMTimeScale(NSEC_PER_SEC)))
+    }
+
     func play() {
         if let avPlayer = self.avPlayer {
             avPlayer.play()
@@ -97,7 +115,26 @@ class Player: NSObject, AudionFaceViewDelegate {
                 self.faceView?.play()
             }
         } else {
-            NSApp.sendAction(NSSelectorFromString("openDocument:"), to: nil, from: self)
+            // If no track is loaded, play the current track from playlist or first track
+            if let currentTrack = playlistManager.currentTrack {
+                if open(url: currentTrack.url) {
+                    avPlayer?.play()
+                    if !self.isScrubbing {
+                        self.faceView?.play()
+                    }
+                }
+            } else if !playlistManager.playlist.tracks.isEmpty {
+                playlistManager.setCurrentTrack(at: 0)
+                if let track = playlistManager.currentTrack, open(url: track.url) {
+                    avPlayer?.play()
+                    if !self.isScrubbing {
+                        self.faceView?.play()
+                    }
+                }
+            } else {
+                // Only show file picker if playlist is empty
+                NSApp.sendAction(NSSelectorFromString("openDocument:"), to: nil, from: self)
+            }
         }
     }
 
@@ -178,7 +215,9 @@ class Player: NSObject, AudionFaceViewDelegate {
     }
 
     private func updateMetadata() {
-        let duration = self.avPlayer?.currentItem?.asset.duration.seconds ?? 0.0
+        // AVPlayerItem.duration (unlike AVAsset.duration) is not deprecated and is
+        // valid now that the item is ready to play.
+        let duration = self.avPlayer?.currentItem?.duration.seconds ?? 0.0
 
         if duration.isFinite {
             if self.streaming && duration == 0 {
@@ -195,33 +234,46 @@ class Player: NSObject, AudionFaceViewDelegate {
             self.play()
         }
 
-        var artist = ""
-        var album = ""
-        var format = ""
-
+        // Load common metadata asynchronously so we never block the main thread.
         self.faceView?.artistText = nil
 
-        for datum in self.avPlayer?.currentItem?.asset.commonMetadata ?? [] {
-            if datum.commonKey == AVMetadataKey.commonKeyTitle, let title = datum.value as? String {
-                self.faceView?.artistText = title
-            } else if datum.commonKey == AVMetadataKey.commonKeyArtist, let value = datum.value as? String {
-                artist = value
-            } else if datum.commonKey == AVMetadataKey.commonKeyAlbumName, let value = datum.value as? String {
-                album = value
-            } else if datum.commonKey == AVMetadataKey.commonKeyFormat, let value = datum.value as? String {
-                format = value
+        if let asset = self.avPlayer?.currentItem?.asset {
+            let filename = self.filename
+            Task {
+                var titleText: String?
+                var artist = ""
+                var album = ""
+                var format = ""
+
+                if let metadata = try? await asset.load(.commonMetadata) {
+                    for datum in metadata {
+                        guard let key = datum.commonKey else { continue }
+                        let value = try? await datum.load(.stringValue)
+                        switch key {
+                        case .commonKeyTitle:
+                            titleText = value
+                        case .commonKeyArtist:
+                            artist = value ?? ""
+                        case .commonKeyAlbumName:
+                            album = value ?? ""
+                        case .commonKeyFormat:
+                            format = value ?? ""
+                        default:
+                            break
+                        }
+                    }
+                }
+
+                // Resolve to immutable values before hopping to the main actor.
+                let resolvedTitle = titleText ?? filename
+                let parts = [artist, album, format].filter { $0.count > 0 }
+                let resolvedAlbumText = parts.isEmpty ? nil : parts.joined(separator: "—")
+
+                await MainActor.run { [weak self] in
+                    self?.faceView?.artistText = resolvedTitle
+                    self?.faceView?.albumText = resolvedAlbumText
+                }
             }
-        }
-
-        if (self.faceView?.artistText ?? nil) == nil {
-            self.faceView?.artistText = self.filename
-        }
-
-        let albumText = [artist, album, format].filter() { $0.count > 0 }.joined(separator: "—")
-        if albumText.count > 0 {
-            self.faceView?.albumText = albumText
-        } else {
-            self.faceView?.albumText = nil
         }
 
         self.avPlayer?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: DispatchQueue.main) { time in
@@ -237,7 +289,20 @@ class Player: NSObject, AudionFaceViewDelegate {
         if let avPlayer = self.avPlayer {
             avPlayer.play()
         } else {
-            NSApp.sendAction(NSSelectorFromString("openDocument:"), to: nil, from: self)
+            // If no track is loaded, play the current track from playlist or first track
+            if let currentTrack = playlistManager.currentTrack {
+                if open(url: currentTrack.url) {
+                    avPlayer?.play()
+                }
+            } else if !playlistManager.playlist.tracks.isEmpty {
+                playlistManager.setCurrentTrack(at: 0)
+                if let track = playlistManager.currentTrack, open(url: track.url) {
+                    avPlayer?.play()
+                }
+            } else {
+                // Only show file picker if playlist is empty
+                NSApp.sendAction(NSSelectorFromString("openDocument:"), to: nil, from: self)
+            }
         }
     }
 
@@ -245,13 +310,22 @@ class Player: NSObject, AudionFaceViewDelegate {
         self.avPlayer?.pause()
     }
 
+    func eject(_ sender: AudionFaceView) {
+        // Toggle playlist mode between floating window and menu bar
+        NSApp.sendAction(#selector(ViewController.togglePlaylistMode(_:)), to: nil, from: self)
+    }
+
     func stop(_ sender: AudionFaceView) {
         self.stop()
     }
 
-    func rewind(_ sender: AudionFaceView) {}
+    func rewind(_ sender: AudionFaceView) {
+        playPreviousTrack()
+    }
 
-    func fastForward(_ sender: AudionFaceView) {}
+    func fastForward(_ sender: AudionFaceView) {
+        playNextTrack()
+    }
 
     func volumeChanged(to volume: Double, sender: AudionFaceView) {
         if volume > 0 {
@@ -274,5 +348,40 @@ class Player: NSObject, AudionFaceViewDelegate {
     func playAfterScrubbing(_ sender: AudionFaceView) {
         self.isScrubbing = false
         self.avPlayer?.play()
+    }
+
+    // MARK: - Playlist Methods
+
+    @objc private func playerDidFinishPlaying(notification: Notification) {
+        if playlistManager.hasNextTrack {
+            playNextTrack()
+        } else {
+            stop()
+        }
+    }
+
+    func playNextTrack() {
+        guard let nextTrack = playlistManager.nextTrack() else { return }
+
+        if open(url: nextTrack.url) {
+            play()
+        }
+    }
+
+    func playPreviousTrack() {
+        guard let previousTrack = playlistManager.previousTrack() else { return }
+
+        if open(url: previousTrack.url) {
+            play()
+        }
+    }
+
+    func playTrack(at index: Int) {
+        playlistManager.setCurrentTrack(at: index)
+        guard let track = playlistManager.currentTrack else { return }
+
+        if open(url: track.url) {
+            play()
+        }
     }
 }
