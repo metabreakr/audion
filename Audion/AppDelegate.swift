@@ -89,12 +89,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.preferencesWindowController?.window?.makeKeyAndOrderFront(self)
     }
 
-    /// Extensions opened as playlists rather than as a single playable file.
-    private static let playlistExtensions: Set<String> = ["audionplaylist", "m3u", "m3u8", "pls"]
-
     func application(_ application: NSApplication, open urls: [URL]) {
         for url in urls {
-            if AppDelegate.playlistExtensions.contains(url.pathExtension.lowercased()) {
+            if ViewController.playlistExtensions.contains(url.pathExtension.lowercased()) {
                 openPlaylist(at: url)
             } else {
                 _ = mainViewController()?.open(url: url)

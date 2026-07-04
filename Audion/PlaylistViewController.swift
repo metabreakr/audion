@@ -295,11 +295,23 @@ class PlaylistViewController: NSViewController {
         panel.allowedContentTypes = ["audionplaylist", "m3u"].compactMap { UTType(filenameExtension: $0) }
         panel.nameFieldStringValue = playlistManager.playlist.name
 
+        // Format chooser so both save formats are discoverable, not just typeable.
+        let formatPopup = NSPopUpButton(frame: NSRect(x: 0, y: 0, width: 260, height: 25), pullsDown: false)
+        formatPopup.addItem(withTitle: "Audion Playlist (.audionplaylist)")
+        formatPopup.addItem(withTitle: "M3U Playlist (.m3u)")
+        panel.accessoryView = Self.saveFormatAccessory(popup: formatPopup)
+
         panel.begin { [weak self] response in
             guard response == .OK, let url = panel.url else { return }
 
+            // Coerce the extension to match the chosen format.
+            let ext = formatPopup.indexOfSelectedItem == 1 ? "m3u" : "audionplaylist"
+            let finalURL = url.pathExtension.lowercased() == ext
+                ? url
+                : url.deletingPathExtension().appendingPathExtension(ext)
+
             do {
-                try self?.playlistManager.savePlaylistToFile(at: url)
+                try self?.playlistManager.savePlaylistToFile(at: finalURL)
             } catch {
                 let alert = NSAlert()
                 alert.messageText = "Save Failed"
@@ -308,6 +320,26 @@ class PlaylistViewController: NSViewController {
                 alert.runModal()
             }
         }
+    }
+
+    private static func saveFormatAccessory(popup: NSPopUpButton) -> NSView {
+        let label = NSTextField(labelWithString: "Format:")
+        label.translatesAutoresizingMaskIntoConstraints = false
+        popup.translatesAutoresizingMaskIntoConstraints = false
+
+        let container = NSView()
+        container.addSubview(label)
+        container.addSubview(popup)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            label.centerYAnchor.constraint(equalTo: popup.centerYAnchor),
+            popup.leadingAnchor.constraint(equalTo: label.trailingAnchor, constant: 8),
+            popup.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            popup.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
+            popup.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -10),
+        ])
+        return container
     }
 
     @IBAction func loadPlaylist(_ sender: Any) {

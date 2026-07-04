@@ -144,16 +144,40 @@ class ViewController: NSViewController, NSUserInterfaceValidations {
         self.faceObserver?.invalidate()
     }
 
+    /// Extensions opened as playlists rather than as a single playable file.
+    static let playlistExtensions: Set<String> = ["audionplaylist", "m3u", "m3u8", "pls"]
+
     @IBAction func openDocument(_ sender: Any?) {
         self.stop(sender)
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
         openPanel.canChooseFiles = true
-        openPanel.allowedContentTypes = AVURLAsset.audiovisualTypes().compactMap { UTType($0.rawValue) }
+
+        let audioTypes = AVURLAsset.audiovisualTypes().compactMap { UTType($0.rawValue) }
+        let playlistTypes = ViewController.playlistExtensions.compactMap { UTType(filenameExtension: $0) }
+        openPanel.allowedContentTypes = audioTypes + playlistTypes
 
         let result = openPanel.runModal()
-        if result == .OK {
-            let _ = self.open(url: openPanel.url!)
+        if result == .OK, let url = openPanel.url {
+            openFileOrPlaylist(url)
+        }
+    }
+
+    /// Loads a playlist file into the playlist, or opens any other file for playback.
+    func openFileOrPlaylist(_ url: URL) {
+        if ViewController.playlistExtensions.contains(url.pathExtension.lowercased()) {
+            do {
+                try PlaylistManager.shared.loadPlaylistFromFile(at: url)
+                playlistWindowManager.show()
+            } catch {
+                let alert = NSAlert()
+                alert.messageText = "Could Not Open Playlist"
+                alert.informativeText = error.localizedDescription
+                alert.alertStyle = .warning
+                alert.runModal()
+            }
+        } else {
+            _ = self.open(url: url)
         }
     }
 

@@ -170,10 +170,9 @@ class PlaylistWindowManager: NSObject {
             if floatingWindow == nil {
                 createFloatingWindow()
             } else {
-                // Restore view controller to window if it was moved to popover
-                if floatingWindow?.contentViewController == nil {
-                    floatingWindow?.contentViewController = playlistViewController
-                }
+                // The shared view controller may have been moved into the menu-bar
+                // popover, which leaves the window blank. Re-seat it before showing.
+                installViewControllerInFloatingWindow()
                 // Manually restore the saved frame
                 if let frameString = UserDefaults.standard.string(forKey: "SavedPlaylistWindowFrame") {
                     let frame = NSRectFromString(frameString)
@@ -199,6 +198,19 @@ class PlaylistWindowManager: NSObject {
     }
 
     // MARK: - Floating Window Mode
+
+    /// Re-seats the shared playlist view controller in the floating window. The
+    /// same view controller is also used by the menu-bar popover, and a view can
+    /// only live in one place at a time — so if the popover took it, the window is
+    /// left blank. Reassigning here reclaims the view. Skipped when the view is
+    /// already in this window, to avoid a needless reload.
+    private func installViewControllerInFloatingWindow() {
+        guard let viewController = playlistViewController, let window = floatingWindow else { return }
+        if viewController.view.window !== window {
+            window.contentViewController = nil
+            window.contentViewController = viewController
+        }
+    }
 
     private func createFloatingWindow() {
         guard let viewController = playlistViewController else { return }
@@ -240,6 +252,7 @@ class PlaylistWindowManager: NSObject {
             return
         }
 
+        installViewControllerInFloatingWindow()
         window.makeKeyAndOrderFront(nil)
         updateWindowAlpha()
     }
@@ -250,15 +263,33 @@ class PlaylistWindowManager: NSObject {
 
     // MARK: - Menu Bar Mode
 
-    private func createMenuBar() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+    /// Creates the status-bar item once and keeps it for the app's lifetime.
+    /// Repeatedly removing and re-adding a status item on every mode switch is what
+    /// made the icon vanish — the fresh item often fails to appear when the removal
+    /// is still being processed on the same run-loop pass.
+    private func ensureStatusItem() {
+        guard statusItem == nil else { return }
 
-        if let button = statusItem?.button {
-            button.title = "♫"  // Musical note symbol
+        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        if let button = item.button {
+            // Template SF Symbol rather than a text title: text-only status items can
+            // render zero-width and misbehave with menu-bar managers like Bartender.
+            if let image = NSImage(systemSymbolName: "music.note.list", accessibilityDescription: "Audion Playlist") {
+                image.isTemplate = true
+                button.image = image
+            } else {
+                button.title = "♫"
+            }
             button.action = #selector(handleStatusItemClick(_:))
             button.target = self
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
+        statusItem = item
+    }
+
+    private func createMenuBar() {
+        ensureStatusItem()
+        statusItem?.isVisible = true
 
         let popover = NSPopover()
         popover.contentSize = NSSize(width: 400, height: 500)
@@ -340,15 +371,11 @@ class PlaylistWindowManager: NSObject {
     }
 
     private func removeMenuBar() {
-        // Completely remove the menu bar item (used when switching to floating mode)
+        // Hide the icon and drop the popover, but keep the status item alive so it
+        // reappears reliably on the next switch to menu-bar mode.
         menuBarPopover?.performClose(nil)
-
-        if let statusItem = statusItem {
-            NSStatusBar.system.removeStatusItem(statusItem)
-            self.statusItem = nil
-        }
-
         menuBarPopover = nil
+        statusItem?.isVisible = false
     }
 }
 
